@@ -1,0 +1,11 @@
+<tr id="address-{{ address.id }}">
+    <th scope="row">{{ address.id }}</th>
+    <td>{{ address.customer}}</td>
+    <td>{{ address.address}}</td>
+    <td>{{ address.city}}</td>
+    <td><span class='badge badge-primary'>{{ address.is_default}}</span></td>
+    <td>
+        <button class="btn btn-sm btn-primary" hx-get="{% url 'customers:address-update' address.id %}" hx-target="#modal-body" data-bs-toggle="modal" data-bs-target="#address-create-modal">Edit</button>
+        <button class="btn btn-sm btn-primary" hx-get="{% url 'customers:address-delete' address.id %}" hx-target="#modal-body" data-bs-toggle="modal" data-bs-target="#address-create-modal">Delete</button>
+    </td>
+</tr>

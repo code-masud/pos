@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block 'title' %} {{ title }} {% endblock 'title' %}
+
+{% block 'content' %}
+    <button class="btn btn-primary" hx-get="{% url 'customers:address-create' %}" hx-target="#modal-body" data-bs-toggle="modal" data-bs-target="#address-create-modal">Add Address</button>
+    <br>
+    <table class="table table-sm m-0">
+        <thead class="bg-primary-500">
+            <tr>
+                <th>#</th>
+                <th>Customer</th>
+                <th>Address</th>
+                <th>City</th>
+                <th>Default</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="address-body">
+            {% for address in customer_address_list %}
+                {% include 'customers/customer_address/partials/customer_address_row.html' %}
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <div class="modal fade" id="address-create-modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Address Information</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="modal-body">
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock 'content' %}

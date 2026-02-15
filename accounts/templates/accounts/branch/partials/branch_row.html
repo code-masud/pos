@@ -1,0 +1,13 @@
+<tr id="branch-{{ branch.id }}">
+    <th scope="row">{{ branch.id }}</th>
+    <td>{{ branch.name}}</td>
+    <td>{{ branch.code}}</td>
+    <td>{{ branch.phone}}</td>
+    <td>{{ branch.email}}</td>
+    <td><span class='badge badge-primary'>{{ branch.is_active}}</span></td>
+    <td>{{ branch.address}}</td>
+    <td>
+        <button class="btn btn-sm btn-primary" hx-get="{% url 'accounts:branch-update' branch.id %}" hx-target="#modal-body" data-bs-toggle="modal" data-bs-target="#branch-create-modal">Edit</button>
+        <button class="btn btn-sm btn-primary" hx-get="{% url 'accounts:branch-delete' branch.id %}" hx-target="#modal-body" data-bs-toggle="modal" data-bs-target="#branch-create-modal">Delete</button>
+    </td>
+</tr>

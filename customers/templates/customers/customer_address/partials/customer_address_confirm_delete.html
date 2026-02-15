@@ -1,0 +1,5 @@
+<form hx-post="{% url 'customers:address-delete' object.id %}" hx-target="#address-{{ object.id }}" hx-swap="outerHTML">
+  {% csrf_token %}
+  <p>Are you sure you want to delete address "{{ object.customer }} ({{ object.address}})"?</p>
+  <button class="btn btn-primary" type="submit">Yes, delete</button>
+</form>

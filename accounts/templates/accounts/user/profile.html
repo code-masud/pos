@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block 'title' %}{{ title }}{% endblock 'title' %}
+
+{% block 'content' %}
+    Username: {{ user.get_username }}<br>
+    Role: {{ user.role}}<br>
+    Full Name: {{ user.first_name}}<br>
+    Last Name: {{ user.last_name}}<br>
+    Email: {{ user.email}}<br>
+    Phone: {{ user.phone}}<br>
+    Address: {{ user.address}}<br>
+    Branches:
+        {% for branch in user.branches.all %}
+            {{ branch.name }}{% if not forloop.last %}, {% endif %}
+        {% endfor %}
+    
+    Active: {{ user.is_active}}<br>
+    Date Joined: {{ user.date_joined}}<br>
+    <a class="btn btn-primary" href="{% url 'password_change' %}" class="btn-link font-weight-bold">Change Password</a>
+    <a class="btn btn-primary" href="{% url 'accounts:user-update' user.id %}" class="btn-link font-weight-bold">Update Profile</a>
+
+{% endblock 'content' %}

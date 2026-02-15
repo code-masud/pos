@@ -1,0 +1,354 @@
+{% load bootstrap5 %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block 'title' %}Dashboard{% endblock 'title' %} | {{ request.user.get_username }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% bootstrap_css %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+</head>
+<body>
+
+<!-- TOPBAR -->
+<nav class="topbar d-flex justify-content-between align-items-center">
+    {% if company.logo %}
+    <picture>
+        <img src="{{ company.logo.url }}" class="img-fluid img-thumbnail" alt="{{ company.name }}" style="width: 100px;height:50px;">
+    </picture>
+    {% endif %}
+    <h5 class="mb-0 fw-semibold">{{ company.name }}</h5>
+    <div class="dropdown">
+        <a class="btn btn-light dropdown-toggle" href="#" data-bs-toggle="dropdown">
+            <i class="bi bi-person-circle"></i>
+            {{ request.user.get_full_name }}
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" href="{% url 'accounts:user-profile' request.user.id %}">Profile</a></li>
+            <li><a class="dropdown-item" href="{% url 'password_change' %}">Change Password</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item text-danger" href="{% url 'logout' %}">Logout</a></li>
+        </ul>
+    </div>
+</nav>
+
+<!-- SIDEBAR -->
+<ul class="sidebar list-unstyled">
+
+    <!-- Dashboard -->
+    <a href="{% url 'dashboard:home' %}">
+        <div class="sidebar-brand"> <i class="bi bi-shop"></i> Dashboard 
+            <div class="small text-muted mt-1"> {{ request.user.role|title }} </div>
+        </div>
+    </a>
+
+    <!-- ACCOUNTS -->
+    <li>
+        <a data-bs-toggle="collapse" href="#accountsMenu">
+            <i class="bi bi-building"></i> Accounts
+        </a>
+
+        <ul class="collapse submenu list-unstyled 
+            {% if request.resolver_match.namespace == 'accounts' %}show{% endif %}" 
+            id="accountsMenu">
+
+            <li class="{% if request.resolver_match.url_name == 'company' %}active{% endif %}">
+                <a href="{% url 'accounts:company' %}">Company</a>
+            </li>
+
+            <li class="{% if request.resolver_match.url_name == 'branch-list' %}active{% endif %}">
+                <a href="{% url 'accounts:branch-list' %}">Branch</a>
+            </li>
+
+            <li class="{% if request.resolver_match.url_name == 'user-list' %}active{% endif %}">
+                <a href="{% url 'accounts:user-list' %}">User</a>
+            </li>
+
+        </ul>
+    </li>
+
+    <!-- SALES -->
+    <li>
+        <a data-bs-toggle="collapse" href="#salesMenu">
+            <i class="bi bi-receipt"></i> Sales
+        </a>
+
+        <ul class="collapse submenu list-unstyled 
+            {% if request.resolver_match.namespace == 'sales' %}show{% endif %}" 
+            id="salesMenu">
+
+            <li class="{% if request.resolver_match.url_name == 'pos' %}active{% endif %}">
+                <a href="{% url 'sales:pos' %}">POS</a>
+            </li>
+
+            <li class="{% if request.resolver_match.url_name == 'sale-list' %}active{% endif %}">
+                <a href="{% url 'sales:sale-list' %}">Sale</a>
+            </li>
+
+            <li class="{% if request.resolver_match.url_name == 'saleitem-list' %}active{% endif %}">
+                <a href="{% url 'sales:saleitem-list' %}">Sale Item</a>
+            </li>
+
+        </ul>
+    </li>
+
+    <!-- INVENTORY -->
+    <li>
+        <a data-bs-toggle="collapse" href="#inventoryMenu">
+            <i class="bi bi-stack"></i> Inventory
+        </a>
+
+        <ul class="collapse submenu list-unstyled 
+            {% if request.resolver_match.namespace == 'inventory' %}show{% endif %}" 
+            id="inventoryMenu">
+
+            <li class="{% if request.resolver_match.url_name == 'brand' %}active{% endif %}">
+                <a href="{% url 'inventory:brand' %}">Brand</a>
+            </li>
+
+            <li class="{% if request.resolver_match.url_name == 'category' %}active{% endif %}">
+                <a href="{% url 'inventory:category' %}">Category</a>
+            </li>
+
+            <li class="{% if request.resolver_match.url_name == 'product' %}active{% endif %}">
+                <a href="{% url 'inventory:product' %}">Product</a>
+            </li>
+
+            <li class="{% if request.resolver_match.url_name == 'stock' %}active{% endif %}">
+                <a href="{% url 'inventory:stock' %}">Stock</a>
+            </li>
+
+            <li class="{% if request.resolver_match.url_name == 'movement' %}active{% endif %}">
+                <a href="{% url 'inventory:movement' %}">Stock Movement</a>
+            </li>
+
+        </ul>
+    </li>
+
+    <!-- PAYMENTS -->
+    <li>
+        <a data-bs-toggle="collapse" href="#paymentsMenu">
+            <i class="bi bi-wallet-fill"></i> Payments
+        </a>
+
+        <ul class="collapse submenu list-unstyled 
+            {% if request.resolver_match.namespace == 'payments' %}show{% endif %}" 
+            id="paymentsMenu">
+
+            <li class="{% if request.resolver_match.url_name == 'payment-method-list' %}active{% endif %}">
+                <a href="{% url 'payments:payment-method-list' %}">Payment Method</a>
+            </li>
+
+            <li class="{% if request.resolver_match.url_name == 'payment-list' %}active{% endif %}">
+                <a href="{% url 'payments:payment-list' %}">Payment</a>
+            </li>
+
+            <li class="{% if request.resolver_match.url_name == 'refund-list' %}active{% endif %}">
+                <a href="{% url 'payments:refund-list' %}">Refund</a>
+            </li>
+
+        </ul>
+    </li>
+
+    <!-- CUSTOMERS -->
+    <li>
+        <a data-bs-toggle="collapse" href="#customerMenu">
+            <i class="bi bi-person-lines-fill"></i> Customers
+        </a>
+
+        <ul class="collapse submenu list-unstyled 
+            {% if request.resolver_match.namespace == 'customers' %}show{% endif %}" 
+            id="customerMenu">
+
+            <li class="{% if request.resolver_match.url_name == 'customer-list' %}active{% endif %}">
+                <a href="{% url 'customers:customer-list' %}">Customer</a>
+            </li>
+
+            <li class="{% if request.resolver_match.url_name == 'address-list' %}active{% endif %}">
+                <a href="{% url 'customers:address-list' %}">Address</a>
+            </li>
+
+        </ul>
+    </li>
+
+    <!-- Logout -->
+    <li>
+        <a href="{% url 'logout' %}" class="text-danger">
+            <i class="bi bi-box-arrow-right"></i> Logout
+        </a>
+    </li>
+
+</ul>
+
+
+<!-- MAIN CONTENT -->
+
+<div class="content">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            {% load url_segments %}
+            <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+            {% with request.path|slice:"1:-1"|split:"/" as segments %}
+                {% if segments.0 %}
+                    <li class="breadcrumb-item">{{ segments.0|title }}</li>
+                {% endif %}
+                {% if segments.1 %}
+                    <li class="breadcrumb-item active" aria-current="page">{{ segments.1|title }}</li>
+                {% endif %}
+            {% endwith %}
+        </ol>
+    </nav>
+    {% block 'content' %}
+    
+    {% endblock 'content' %}
+</div>
+
+<footer class="text-center py-3 text-muted">
+    © 2026 POS System · Built with Django & Bootstrap 5
+</footer>
+
+{% bootstrap_javascript %}
+<script src="https://releases.jquery.com/git/jquery-git.min.js"></script>
+<script src="https://unpkg.com/htmx.org@1.9.10"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script type="text/javascript">
+    const ctx = document.getElementById('revenueChart');
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Last 7 Days'],
+            datasets: [{
+                label: 'Revenue',
+                data: [{{ last_7_revenue|default:0 }}],
+                backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                borderRadius: 6
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        }
+    });
+
+    document.body.addEventListener("closeModal", () => {
+        Swal.fire({
+            icon: "success",
+            title: "Task completed successfully",
+            timer: 3000,
+            showConfirmButton: false
+        });
+        $('.modal').modal('hide');
+    });
+
+    $(document).ready(function() {
+        $('.select2').select2({
+            placeholder: "Select options",
+            width: '100%'
+        });
+
+        $('#pos-product-cart').on('submit', function() {
+            $("#product").val(null).trigger("change");
+            $("#quantity").val(1)
+            $("#price").val('')
+            $("#tax_rate").val('')
+        });
+
+        $("#discount_amount").on("input", function () {
+            const subTotal = parseFloat($("#sub_total").text() || $("#sub_total").val()) || 0;
+            let discount = parseFloat($(this).val()) || 0;
+
+            if (discount < 0) {
+                discount = 0;
+            }
+
+            if (discount > subTotal) {
+                discount = subTotal;
+            }
+
+            const grandTotal = subTotal - discount;
+
+            $(this).val(discount);
+            $("#grand_total").val(grandTotal.toFixed(2));
+        });
+
+        $(".product-search-ajax").select2({
+            ajax:
+            {
+                url: "{% url 'inventory:api-products' %}",
+                dataType: 'json',
+                delay: 250,
+                data: function(params)
+                {
+                    return {
+                        search: params.term, // search term
+                        page: params.page
+                    };
+                },
+                processResults: function(data, params)
+                {
+                    params.page = params.page || 1;
+
+                    return {
+                        results: data.results,
+                        pagination:
+                        {
+                            more: (params.page * 2) < data.count
+                        }
+                    };
+                },
+                cache: true
+            },
+            placeholder: 'Search for a repository',
+            escapeMarkup: function(markup)
+            {
+                return markup;
+            }, // let our custom formatter work
+            minimumInputLength: 1,
+            templateResult: formatRepo,
+            templateSelection: formatRepoSelection
+        });
+
+        function formatRepo(repo)
+        {
+            if (repo.loading)
+            {
+                return repo.text;
+            }
+
+            var markup = "<div class='select2-result-repository clearfix d-flex'>" +
+                "<div class='select2-result-repository__avatar mr-2'><img src='" + repo.image + "' class='width-2 height-2 mt-1 rounded' /></div>" +
+                "<div class='select2-result-repository__meta'>" +
+                "<div class='select2-result-repository__title fs-lg fw-500'>" + repo.name + "</div>";
+
+            if (repo.sku)
+            {
+                markup += "<div class='select2-result-repository__description fs-xs opacity-80 mb-1'>" + repo.sku + "</div>";
+            }
+
+            markup += "</div></div>";
+
+            return markup;
+        }
+
+        function formatRepoSelection(repo)
+        {
+            $("#price").val(repo.cost_price);
+            $("#tax_rate").val(repo.tax_rate);
+            return repo.name || repo.text;
+        }
+    });
+</script>
+{% load sweetify %}
+{% sweetify %}
+</body>
+</html>

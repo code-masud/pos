@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block 'title' %} {{ title }} {% endblock 'title' %}
+
+{% block 'content' %}
+{% load crispy_forms_tags %}
+    <form action="{% url 'accounts:company' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button class="btn btn-primary" type="submit">Save</button>
+    </form>
+{% endblock 'content' %}

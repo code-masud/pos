@@ -1,0 +1,9 @@
+<form hx-post="{% url 'inventory:category-delete' category.id %}"
+    hx-target="#category-{{category.id}}"
+    hx-swap="outerHTML"
+>
+    {% csrf_token %}
+    <h3>Delete</h3>
+    <h5>Are you sure you want to delete the category “{{ object.name }}”? All of the related items will be deleted.</h5>
+    <button class="btn btn-primary" type="submit">Delete</button>
+</form>
