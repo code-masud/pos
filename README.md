@@ -83,24 +83,6 @@ Copy the example environment file:
 ```bash
 cp .env.example .env
 ```
-
-Update `.env` with your configuration:
-
-```env
-SECRET_KEY=your-secret-key
-DEBUG=True
-
-ALLOWED_HOSTS=127.0.0.1,localhost
-
-# Database
-DATABASE_NAME=your_db_name
-DATABASE_USER=your_db_user
-DATABASE_PASSWORD=your_db_password
-
-# Email
-EMAIL_BACKEND=django.core.mail.backends.console.EmailBackend
-```
-
 ---
 
 ### 5️⃣ Apply Migrations
