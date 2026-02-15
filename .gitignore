@@ -68,8 +68,8 @@ media/
 staticfiles/
 
 # Migrations
-/migrations/
-/migrations/__init__.py
+*/migrations/*.py
+!*/migrations/__init__.py
 
 # Flask stuff:
 instance/
