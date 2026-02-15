@@ -84,7 +84,7 @@ def create_sale(cart_data, post_data, user):
         discount_amount=discount_amount,
         total_amount=cart_total,
         status='DRAFT',
-        notes=post_data.get('notes', ''),
+        notes=post_data.get('note', ''),
     )
 
     subtotal = Decimal("0.00")
