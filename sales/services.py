@@ -65,7 +65,7 @@ def create_sale(cart_data, post_data, user):
     # Create Customer & CustomerAddress
     customer, _ = Customer.objects.get_or_create(
         phone=post_data['phone'], 
-        defaults={'name':post_data.get('name',''), 'email':post_data.get('email', ''), 'loyalty_points':0}
+        defaults={'name':post_data.get('q',''), 'email':post_data.get('email', ''), 'loyalty_points':0}
     )
     if post_data.get('address'):
         CustomerAddress.objects.get_or_create(
