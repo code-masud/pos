@@ -1,0 +1,12 @@
+<tr id="stock-{{ stock.id }}">
+    <td>{{ stock.id }}</td>
+    <td>{{ stock.product }}</td>
+    <td>{{ stock.branch }}</td>
+    <td>{{ stock.quantity }}</td>
+    <td>{{ stock.reorder_level }}</td>
+    <td>{{ stock.updated_at }}</td>
+    <td>
+        <button hx-get="{% url 'inventory:stock-update' stock.id %}" hx-target="#modal-body" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#stock-create-modal">Edit</button>
+        <button hx-get="{% url 'inventory:stock-delete' stock.id %}" hx-target="#modal-body" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#stock-create-modal">Delete</button>
+    </td>
+</tr>

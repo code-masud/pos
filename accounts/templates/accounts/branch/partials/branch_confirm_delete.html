@@ -1,0 +1,5 @@
+<form hx-post="{% url 'accounts:branch-delete' branch.id %}" hx-target="#branch-{{ object.id }}" hx-swap="outerHTML">
+  {% csrf_token %}
+  <p>Are you sure you want to delete branch "{{ object.name }} ({{ object.code}})"?</p>
+  <button class="btn btn-primary" type="submit">Yes, delete</button>
+</form>

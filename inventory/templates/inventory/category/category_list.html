@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+
+{% block 'title' %} {{ title }} {% endblock 'title' %}
+
+{% block 'content' %}
+    <button class="btn btn-primary" hx-get="{% url 'inventory:category-add' %}" hx-target="#modal-body" data-bs-toggle="modal" data-bs-target="#category-create-modal">Add Category</button>
+    <br>
+    <table class="table table-sm m-0">
+        <thead class="bg-primary-500">
+            <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Parent</th>
+                <th>Active</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="category-body">
+            {% for category in category_list %}
+                {% include 'inventory/category/partials/category_row.html' %}
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <div class="modal fade" id="category-create-modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <div class="modal-header">
+                        <h5 class="modal-title">Category Information</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" id="modal-body">
+                        
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock 'content' %}

@@ -1,0 +1,19 @@
+<tr id="product-{{ product.id }}">
+    <td>{{ product.id }}</td>
+    <td>
+        {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.name }}" style="width: 50px; height: auto;">
+        {% endif %}
+    </td>
+    <td>{{ product.name }}</td>
+    <td>{{ product.sku }}</td>
+    <td>{{ product.category }}</td>
+    <td>{{ product.cost_price }}</td>
+    <td>{{ product.selling_price }}</td>
+    <td>{{ product.tax_rate }}</td>
+    <td>{{ product.is_active }}</td>
+    <td>
+        <button hx-get="{% url 'inventory:product-update' product.id %}" hx-target="#modal-body" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#product-create-modal">Edit</button>
+        <button hx-get="{% url 'inventory:product-delete' product.id %}" hx-target="#modal-body" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#product-create-modal">Delete</button>
+    </td>
+</tr>

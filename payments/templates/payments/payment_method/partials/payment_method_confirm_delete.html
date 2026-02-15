@@ -1,0 +1,10 @@
+<form 
+    hx-post="{% url 'payments:payment-method-delete' payment_method.id %}"
+    hx-target="#payment-method-{{payment_method.id}}"
+    hx-swap="outerHTML"
+>
+    {% csrf_token %}
+    <h3>Delete</h3>
+    <h5>Are you sure you want to delete payment method "{{ object.name }}"? All related data with this also deleted.</h5>
+    <button type="submit" class="btn btn-primary">Delete</button>
+</form>

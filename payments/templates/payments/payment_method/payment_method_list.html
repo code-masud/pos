@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block 'title' %}{{ title }}{% endblock 'title' %}
+
+{% block 'content' %}
+<!-- Button trigger modal -->
+<button hx-get="{% url 'payments:payment-method-create' %}" hx-target="#modal-body" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#paymentMethodModal">
+  Add Payment Method
+</button><br>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Name</th>
+      <th scope="col">Code</th>
+      <th scope="col">Icon</th>
+      <th scope="col">Active</th>
+      <th scope="col">Action</th>
+    </tr>
+  </thead>
+  <tbody id="payment-method-list">
+    {% for payment_method in payment_method_list %}
+        {% include 'payments/payment_method/partials/payment_method_row.html' %}
+    {% endfor %}
+  </tbody>
+</table>
+<!-- Modal -->
+<div class="modal fade" id="paymentMethodModal" tabindex="-1" aria-labelledby="paymentMethodModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="paymentMethodModalLabel">Payment Method Information</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="modal-body">
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock 'content' %}

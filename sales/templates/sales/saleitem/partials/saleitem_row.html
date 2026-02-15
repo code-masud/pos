@@ -1,0 +1,12 @@
+<tr id="saleitem-{{ saleitem.id }}">
+    <th scope="row">{{ saleitem.id }}</th>
+    <td>{{saleitem.sale}}</td>
+    <td>{{saleitem.product}}</td>
+    <td>{{saleitem.quantity}}</td>
+    <td>{{saleitem.unit_price}}</td>
+    <td>{{saleitem.total_price}}</td>
+    <td>
+        <button hx-get="{% url 'sales:saleitem-update' saleitem.id %}" hx-target="#modal-body" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#saleitem-create-modal">Edit</button>
+        <button hx-get="{% url 'sales:saleitem-delete' saleitem.id %}" hx-target="#modal-body" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#saleitem-create-modal">Delete</button>
+    </td>
+</tr>

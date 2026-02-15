@@ -1,0 +1,235 @@
+{% extends "base.html" %}
+
+{% block 'title' %}{{ title }}{% endblock 'title' %}
+
+{% block 'content' %}
+    <div class="row">
+        <div class="col-lg-8">
+            <form action="{% url 'sales:pos' %}" method="POST">
+                {% csrf_token %}
+                <div id="cart-container">
+                    <table class="table table-sm m-0 table-hover table-bordered">
+                        <thead class="bg-primary-500">
+                            <tr>
+                                <th>Name</th>
+                                <th>Qty</th>
+                                <th>Price</th>
+                                <th>Total</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for id, item in cart.items %}
+                            <tr>
+                                <td>{{ item.name }}</td>
+                                <td>
+                                    {% if item.quantity != '1' %}
+                                    <a hx-get="{% url 'sales:cart-decrement' item.id %}" hx-target="#cart-container" hx-swap="innerHTML" title="Minus"><i class="bi bi-dash-circle"></i></a>
+                                    &nbsp;
+                                    {% endif %}
+                                    {{ item.quantity }}
+                                    &nbsp;
+                                    <a hx-get="{% url 'sales:cart-increment' item.id %}" hx-target="#cart-container" hx-swap="innerHTML" title="Plus"><i class="bi bi-plus-circle-fill"></i></a>
+                                </td>
+                                <td>{{ item.price|floatformat:2 }}</td>
+                                <td>{{ item.total|floatformat:2 }}</td>
+                                <td>
+                                    <a hx-get="{% url 'sales:cart-delete' item.id %}" hx-target="#cart-container" hx-swap="innerHTML"><i class="bi bi-x-circle-fill"></i></a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5">Cart is empty</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td>Sub Total</td>
+                                <td>{{ total_qty|floatformat:2 }}</td>
+                                <td></td>
+                                <td>
+                                    <input type="number"
+                                        name="sub_total"
+                                        id="sub_total"
+                                        min="0"
+                                        step="0.01"
+                                        class="form-control form-control-sm"
+                                        placeholder="0.00"
+                                        value="{{ total|floatformat:2 }}"
+                                    >
+                                </td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">Discount</td>
+                                <td>
+                                    <input type="number"
+                                        name="discount_amount"
+                                        id="discount_amount"
+                                        min="0"
+                                        step="0.01"
+                                        class="form-control form-control-sm"
+                                        placeholder="0.00">
+                                </td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Grand Total</td>
+                                <td>{{ total_qty|floatformat:2 }}</td>
+                                <td></td>
+                                <td>
+                                    <input type="number"
+                                        readonly
+                                        name="grand_total"
+                                        id="grand_total"
+                                        class="form-control form-control-sm"
+                                        value="{{ total|floatformat:2 }}">
+                                </td>
+                                <td></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <br>
+                <div class="row row-cols-auto g-3 align-items-end">
+                    <!-- Branch -->
+                    <div class="col-md-4">
+                        <label for="branch" class="form-label">Branch</label>
+                        <select name="branch" id="branch" class="form-select" required>
+                            {% for branch in request.user.branches.all %}
+                                <option value="{{ branch.id }}">{{ branch.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- Name -->
+                    <div class="col-md-4">
+                        <label for="name" class="form-label">Name</label>
+                        <div class="position-relative">
+                            <input type="text"
+                                hx-get="{% url 'customers:customer-autocomplete' %}"
+                                hx-target="#search-results"
+                                hx-trigger="keyup changed delay:400ms"
+                                hx-indicator="#loading"
+                                class="form-control"
+                                name="q"
+                                id="customer-search"
+                                autocomplete="off"
+                                placeholder="Search customer..."
+                                required>
+                            <div id="search-results" class="list-group position-absolute w-100 z-3"></div>
+                        </div>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="col-md-4">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="text" class="form-control" name="email" id="email">
+                    </div>
+
+                    <!-- Phone -->
+                    <div class="col-md-4">
+                        <label for="phone" class="form-label">Phone</label>
+                        <input type="text" class="form-control" name="phone" id="phone" required>
+                    </div>
+
+                    <!-- Address -->
+                    <div class="col-4">
+                        <label for="address" class="form-label">Address</label>
+                        <input type="text" class="form-control" name="address" id="address">
+                    </div>
+
+                    <!-- Sales Note -->
+                    <div class="col-4">
+                        <label for="note" class="form-label">Sales Note</label>
+                        <input type="text" class="form-control" name="note" id="note">
+                    </div>
+
+                    <!-- Payment Method -->
+                    <div class="col-4">
+                        <label class="form-label">Payment</label>
+                        <select name="payment_method[]" class="form-select">
+                            {% for method in payment_methods %}
+                                <option value="{{ method.id }}">{{ method.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- Amount -->
+                    <div class="col-4">
+                        <label class="form-label">Amount</label>
+                        <input type="text" name="payment_amount[]" class="form-control">
+                    </div>
+
+                    <!-- Note -->
+                    <div class="col-4">
+                        <label class="form-label">Reference / Note</label>
+                        <input type="text" name="payment_note[]" class="form-control">
+                    </div>
+
+                    <!-- Payment Method -->
+                    <div class="col-4">
+                        <select name="payment_method[]" class="form-select">
+                            {% for method in payment_methods %}
+                                <option value="{{ method.id }}">{{ method.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- Amount -->
+                    <div class="col-4">
+                        <input type="text" name="payment_amount[]" class="form-control">
+                    </div>
+
+                    <!-- Note -->
+                    <div class="col-4">
+                        <input type="text" name="payment_note[]" class="form-control">
+                    </div>
+
+                    <!-- Submit -->
+                    <div class="col-">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+        <div class="col-lg-4">
+            <form hx-post="{% url 'sales:cart-add' %}" hx-target="#cart-container" hx-swap="innerHTML" id="pos-product-cart">
+                {% csrf_token %}
+                    <div class="form-group">
+                        <label class="form-label" for="product">Product <strong class='text-danger'>*</strong></label>
+                        <div class="input-group">
+                            <select data-placeholder="Search product" class="product-search-ajax form-control" name="product" id="product" required></select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="quantity">Quantity <strong class='text-danger'>*</strong></label>
+                        <div class="input-group">
+                            <input name="quantity" id="quantity" type="number" class="form-control" placeholder="quantity" value="1" min="0" step="any" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="price">Price <strong class='text-danger'>*</strong></label>
+                        <div class="input-group">
+                            <input id="price" name="price" type="number" class="form-control" placeholder="price" min="0" step="any" value="0" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="tax_rate">Tax Rate <strong class='text-danger'>*</strong></label>
+                        <div class="input-group">
+                            <input id="tax_rate" name="tax_rate" type="number" class="form-control" placeholder="tax %" min="0" step="any" value="0" required>
+                        </div>
+                    </div>
+                    <div class="panel-content border-faded border-left-0 border-right-0 border-bottom-0 d-flex flex-row align-items-center">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="apply_tax" name="apply_tax">
+                            <label class="custom-control-label" for="apply_tax">Apply tax</label>
+                        </div>
+                    <button class="btn btn-primary ml-auto" type="submit">Add</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock 'content' %}
