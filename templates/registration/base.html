@@ -28,10 +28,12 @@
         <div id="contact" class="container">
             <div class="row">
                 <div class="col-md-6">
-                    <p class="h3">{{ company.name }}</p>
-                    <p>Address: {{ company.address }}</p>
-                    <p>Phone: {{ company.phone }}</p>
-                    <p>Email: {{ company.email }}</p>
+                    {% if company %}
+                        <p class="h3">{{ company.name }}</p>
+                        <p>Address: {{ company.address }}</p>
+                        <p>Phone: {{ company.phone }}</p>
+                        <p>Email: {{ company.email }}</p>
+                    {% endif %}
                 </div>
                 <div class="col-md-6">
                     {% block 'content' %}{% endblock 'content' %}
