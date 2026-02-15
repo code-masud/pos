@@ -12,6 +12,10 @@ import sweetify
 from .services import create_sale
 from django.urls import reverse_lazy
 
+class InvoiceView(DetailView):
+    model = Sale
+    template_name = 'sales/sale/invoice.html'
+
 class PointsOfSale(LoginRequiredMixin, TemplateView):
     template_name = 'sales/pos/pos.html'
 

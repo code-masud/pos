@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.core.validators import MinValueValidator
 from decimal import Decimal
+from django.db.models import Sum
 
 class Sale(models.Model):
     DRAFT = "DRAFT"
