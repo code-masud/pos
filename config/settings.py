@@ -11,6 +11,9 @@ load_dotenv(BASE_DIR / '.env')
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('SECRET_KEY')
 
+if not SECRET_KEY:
+    raise ValueError("SECRET_KEY is not set in environment variables")
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG') == 'True'
 
@@ -135,6 +138,7 @@ LOGOUT_REDIRECT_URL = 'login'
 # Custom User Model
 AUTH_USER_MODEL = 'accounts.User'
 
+# Authentication Backends
 AUTHENTICATION_BACKENDS = [
     "accounts.backends.UsernameOrEmailOrPhone",
     "django.contrib.auth.backends.ModelBackend",
@@ -144,7 +148,7 @@ AUTHENTICATION_BACKENDS = [
 SESSION_COOKIE_AGE = int(os.getenv('SESSION_COOKIE_AGE', 86400))
 SESSION_SAVE_EVERY_REQUEST = os.getenv('SESSION_SAVE_EVERY_REQUEST') == 'True'
 
-
+# Sweetify
 SWEETIFY_SWEETALERT_LIBRARY = 'sweetalert2'
 
 # Email Configuration
