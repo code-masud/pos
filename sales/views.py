@@ -63,24 +63,15 @@ def add_to_cart(request):
             return JsonResponse({"error": "Quantity must be greater than zero"}, status=400)
 
         # Apply tax (tax-exclusive model)
-        if apply_tax and tax_rate > 0:
-            tax_amount = (price * tax_rate / Decimal("100")).quantize(
-                Decimal("0.01"), rounding=ROUND_HALF_UP
-            )
-        else:
-            tax_amount = Decimal("0.00")
-
-        final_price = price + tax_amount
-        line_total = (final_price * quantity).quantize(
-            Decimal("0.01"), rounding=ROUND_HALF_UP
-        )
+        if not apply_tax:
+            tax_rate = Decimal("0.00")
 
         cart = Cart(request)
 
         cart_item = {
             "id": str(product_obj.id),
             "name": product_obj.name,
-            "price": str(final_price),
+            "price": str(price),
             "qty": str(quantity),
             "tax_rate": str(tax_rate),
         }
