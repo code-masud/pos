@@ -7,6 +7,7 @@
     <td>{{sale.status}}</td>
     <td>{{sale.created_at}}</td>
     <td>
+        <a href="{% url 'sales:invoice' sale.id %}" class="btn btn-primary">Invoice</a>
         <button hx-get="{% url 'sales:sale-update' sale.id %}" hx-target="#modal-body" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#sale-create-modal">Edit</button>
         <button hx-get="{% url 'sales:sale-delete' sale.id %}" hx-target="#modal-body" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#sale-create-modal">Delete</button>
     </td>

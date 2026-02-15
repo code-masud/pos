@@ -16,6 +16,12 @@ class InvoiceView(DetailView):
     model = Sale
     template_name = 'sales/sale/invoice.html'
 
+    def get_context_data(self, **kwargs):
+        sale = self.get_object()
+        context = super().get_context_data(**kwargs)
+        context["title"] = f'Invoice #{sale.id}'
+        return context
+
 class PointsOfSale(LoginRequiredMixin, TemplateView):
     template_name = 'sales/pos/pos.html'
 
@@ -30,6 +36,7 @@ class PointsOfSale(LoginRequiredMixin, TemplateView):
             request.session.modified = True
 
             sweetify.success(request, f'Sale #{sale.id} created successfully.', timer="3000")
+            return redirect("sales:invoice", pk=sale.id)
         except Exception as e:
             sweetify.error(request, str(e), timer="3000")
             

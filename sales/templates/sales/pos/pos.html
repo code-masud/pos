@@ -57,6 +57,7 @@
                                         class="form-control form-control-sm"
                                         placeholder="0.00"
                                         value="{{ total|floatformat:2 }}"
+                                        readonly
                                     >
                                 </td>
                                 <td></td>
@@ -70,6 +71,7 @@
                                         min="0"
                                         step="0.01"
                                         class="form-control form-control-sm"
+                                        value="0"
                                         placeholder="0.00">
                                 </td>
                                 <td></td>
@@ -150,6 +152,7 @@
                     <div class="col-4">
                         <label class="form-label">Payment</label>
                         <select name="payment_method[]" class="form-select">
+                            <option value="">Select</option>
                             {% for method in payment_methods %}
                                 <option value="{{ method.id }}">{{ method.name }}</option>
                             {% endfor %}
@@ -171,6 +174,7 @@
                     <!-- Payment Method -->
                     <div class="col-4">
                         <select name="payment_method[]" class="form-select">
+                            <option value="">Select</option>
                             {% for method in payment_methods %}
                                 <option value="{{ method.id }}">{{ method.name }}</option>
                             {% endfor %}
@@ -198,35 +202,36 @@
         <div class="col-lg-4">
             <form hx-post="{% url 'sales:cart-add' %}" hx-target="#cart-container" hx-swap="innerHTML" id="pos-product-cart">
                 {% csrf_token %}
-                    <div class="form-group">
-                        <label class="form-label" for="product">Product <strong class='text-danger'>*</strong></label>
-                        <div class="input-group">
-                            <select data-placeholder="Search product" class="product-search-ajax form-control" name="product" id="product" required></select>
-                        </div>
+                <div class="form-group">
+                    <label class="form-label" for="product">Product <strong class='text-danger'>*</strong></label>
+                    <div class="input-group">
+                        <select data-placeholder="Search product" class="product-search-ajax form-control" name="product" id="product" required></select>
                     </div>
-                    <div class="form-group">
-                        <label class="form-label" for="quantity">Quantity <strong class='text-danger'>*</strong></label>
-                        <div class="input-group">
-                            <input name="quantity" id="quantity" type="number" class="form-control" placeholder="quantity" value="1" min="0" step="any" required>
-                        </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="quantity">Quantity <strong class='text-danger'>*</strong></label>
+                    <div class="input-group">
+                        <input name="quantity" id="quantity" type="number" class="form-control" placeholder="quantity" value="1" min="0" step="any" required>
                     </div>
-                    <div class="form-group">
-                        <label class="form-label" for="price">Price <strong class='text-danger'>*</strong></label>
-                        <div class="input-group">
-                            <input id="price" name="price" type="number" class="form-control" placeholder="price" min="0" step="any" value="0" required>
-                        </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="price">Price <strong class='text-danger'>*</strong></label>
+                    <div class="input-group">
+                        <input id="price" name="price" type="number" class="form-control" placeholder="price" min="0" step="any" value="0" required>
                     </div>
-                    <div class="form-group">
-                        <label class="form-label" for="tax_rate">Tax Rate <strong class='text-danger'>*</strong></label>
-                        <div class="input-group">
-                            <input id="tax_rate" name="tax_rate" type="number" class="form-control" placeholder="tax %" min="0" step="any" value="0" required>
-                        </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="tax_rate">Tax Rate <strong class='text-danger'>*</strong></label>
+                    <div class="input-group">
+                        <input id="tax_rate" name="tax_rate" type="number" class="form-control" placeholder="tax %" min="0" step="any" value="0" required>
                     </div>
-                    <div class="panel-content border-faded border-left-0 border-right-0 border-bottom-0 d-flex flex-row align-items-center">
-                        <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="apply_tax" name="apply_tax">
-                            <label class="custom-control-label" for="apply_tax">Apply tax</label>
-                        </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                        <input type="checkbox" class="custom-control-input" id="apply_tax" name="apply_tax" checked>
+                        <label class="custom-control-label" for="apply_tax">Apply tax</label>
+                    </div>
+                    <br>
                     <button class="btn btn-primary ml-auto" type="submit">Add</button>
                 </div>
             </form>
