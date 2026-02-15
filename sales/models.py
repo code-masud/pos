@@ -2,7 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.core.validators import MinValueValidator
 from decimal import Decimal
-from django.db.models import Sum
+from django.db.models import Sum, F, DecimalField, ExpressionWrapper
 
 class Sale(models.Model):
     DRAFT = "DRAFT"
@@ -36,6 +36,54 @@ class Sale(models.Model):
 
     def __str__(self):
         return self.receipt_number
+    
+    @property
+    def subtotal_with_tax(self):
+        total = self.items.aggregate(
+            total=Sum(
+                ExpressionWrapper(
+                    F('tax_amount') + F('unit_price'),
+                    output_field=DecimalField()
+                )
+            )
+        )['total']
+
+        return total or Decimal('0.00')
+    
+    @property
+    def paid_amount(self):
+        total = self.payments.aggregate(total=Sum('amount'))['total']
+        return total or Decimal('0.00')
+    
+    @property
+    def refund_amount(self):
+        total = sum(
+            (payment.refunded_amount() for payment in self.payments.all()),
+            Decimal('0.00')
+        )
+        return total
+    
+    @property
+    def due_amount(self):
+        due = self.total_amount - self.paid_amount - self.refund_amount
+        return abs(due)
+
+    @property
+    def change_amount(self):
+        if self.paid_amount > self.total_amount:
+            return self.paid_amount - self.total_amount
+        return Decimal('0.00')
+
+    @property
+    def payment_methods(self):
+        return ", ".join(
+            payment.method.name for payment in self.payments.select_related('method')
+        )
+    
+    @property
+    def billing_address(self):
+        address = self.customer.addresses.filter(is_default=True).first()
+        return address.address if address else None
 
 class SaleItem(models.Model):
     sale = models.ForeignKey(Sale,on_delete=models.CASCADE,related_name="items")
