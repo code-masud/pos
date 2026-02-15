@@ -242,23 +242,19 @@
             $("#tax_rate").val('')
         });
 
-        $("#discount_amount").on("input", function () {
-            const subTotal = parseFloat($("#sub_total").text() || $("#sub_total").val()) || 0;
+        $(document).on("input", "#discount_amount", function () {
+            const subTotal = parseFloat($("#sub_total").val()) || 0;
             let discount = parseFloat($(this).val()) || 0;
 
-            if (discount < 0) {
-                discount = 0;
-            }
-
-            if (discount > subTotal) {
-                discount = subTotal;
-            }
+            if (discount < 0) discount = 0;
+            if (discount > subTotal) discount = subTotal;
 
             const grandTotal = subTotal - discount;
 
             $(this).val(discount);
             $("#grand_total").val(grandTotal.toFixed(2));
         });
+
 
         $(".product-search-ajax").select2({
             ajax:
