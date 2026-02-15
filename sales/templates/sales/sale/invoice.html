@@ -119,7 +119,6 @@
             <h2>{{ company.name }}</h2>
             <p>{{ company.phone }}</p>
             <p>{{ company.address }}</p>
-            <p>{{ company.email }}</p>
         </div>
 
         <div class="invoice-title">
@@ -131,8 +130,7 @@
 
     <!-- CUSTOMER INFO -->
     <div class="details">
-        <p><strong>Bill To:</strong></p>
-        <p>Mr, {{ sale.customer.name|default:"Walk-in Customer" }} ({{ sale.customer.phone|default:"" }})</p>
+        <p><strong>Bill To:</strong> {{ sale.customer.name|default:"Walk-in Customer" }}, Phone: {{ sale.customer.phone|default:"NA" }}, Address: {{ sale.billing_address|default:"NA" }}</p>
     </div>
 
     <!-- ITEMS TABLE -->
@@ -156,27 +154,49 @@
                 <td class="text-right">{{ item.total_price|floatformat:2 }}</td>
             </tr>
             {% endfor %}
+            <tr>
+                <td colspan="4">Subtotal</td>
+                <td class="text-right">{{ sale.subtotal_with_tax|floatformat:2 }}</td>
+            </tr>
+            <tr>
+                <td colspan="4">Discount</td>
+                <td class="text-right">{{ sale.discount_amount|floatformat:2 }}</td>
+            </tr>
+            <tr class="grand-total">
+                <td colspan="4">Grand Total</td>
+                <td class="text-right">{{ sale.total_amount|floatformat:2 }}</td>
+            </tr>
+            <tr>
+                <td colspan="4">Paid Amount</td>
+                <td class="text-right">
+                {{ sale.paid_amount|floatformat:2 }}
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">Payment Method</td>
+                <td class="text-right">
+                    {{ sale.payment_methods }}
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">Refund Amount</td>
+                <td class="text-right">
+                    {{ sale.refund_amount|floatformat:2 }}
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">Change Amount</td>
+                <td class="text-right">
+                    {{ sale.change_amount|floatformat:2 }}
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">Due Amount</td>
+                <td class="text-right">
+                    {{ sale.due_amount|floatformat:2 }}
+                </td>
+            </tr>
         </tbody>
-    </table>
-
-    <!-- TOTALS -->
-    <table class="totals">
-        <tr>
-            <td width="80%">Subtotal:</td>
-            <td class="text-right">{{ sale.subtotal|floatformat:2 }}</td>
-        </tr>
-        <tr>
-            <td>Tax:</td>
-            <td class="text-right">{{ sale.tax_amount|floatformat:2 }}</td>
-        </tr>
-        <tr>
-            <td>Discount:</td>
-            <td class="text-right">{{ sale.discount_amount|floatformat:2 }}</td>
-        </tr>
-        <tr class="grand-total">
-            <td>Grand Total:</td>
-            <td class="text-right">{{ sale.total_amount|floatformat:2 }}</td>
-        </tr>
     </table>
 
     <!-- FOOTER -->
