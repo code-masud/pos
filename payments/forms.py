@@ -19,7 +19,7 @@ class PaymentForm(forms.ModelForm):
 class RefundForm(forms.ModelForm):
     class Meta:
         model = Refund
-        fields = ['number', 'payment', 'sale', 'amount', 'reason', 'status', 'processed_by']
+        fields = ['number', 'payment', 'amount', 'reason', 'status', 'processed_by']
         widgets = {
             'payment': forms.Select(attrs={'class': 'select2 form-control'}),
             'sale': forms.Select(attrs={'class': 'select2 form-control'}),
