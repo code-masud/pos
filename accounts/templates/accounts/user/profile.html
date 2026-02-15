@@ -3,21 +3,51 @@
 {% block 'title' %}{{ title }}{% endblock 'title' %}
 
 {% block 'content' %}
-    Username: {{ user.get_username }}<br>
-    Role: {{ user.role}}<br>
-    Full Name: {{ user.first_name}}<br>
-    Last Name: {{ user.last_name}}<br>
-    Email: {{ user.email}}<br>
-    Phone: {{ user.phone}}<br>
-    Address: {{ user.address}}<br>
-    Branches:
-        {% for branch in user.branches.all %}
-            {{ branch.name }}{% if not forloop.last %}, {% endif %}
-        {% endfor %}
-    
-    Active: {{ user.is_active}}<br>
-    Date Joined: {{ user.date_joined}}<br>
-    <a class="btn btn-primary" href="{% url 'password_change' %}" class="btn-link font-weight-bold">Change Password</a>
-    <a class="btn btn-primary" href="{% url 'accounts:user-update' user.id %}" class="btn-link font-weight-bold">Update Profile</a>
+    <div class="profile-card text-center">
+        <!-- Profile Image -->
+        <img src="{{ user.image.url|default:'https://via.placeholder.com/150' }}" 
+             alt="{{ user.get_username }}" class="profile-img mb-3">
 
+        <!-- Name & Role -->
+        <h3>{{ user.get_full_name|default:user.username }}</h3>
+        <p class="text-muted">{{ user.role|default:"No Role Assigned" }}</p>
+
+        <hr>
+
+        <!-- Profile Details -->
+        <dl class="row profile-info text-start mt-3">
+            <dt class="col-sm-4">Username:</dt>
+            <dd class="col-sm-8">{{ user.get_username }}</dd>
+
+            <dt class="col-sm-4">Email:</dt>
+            <dd class="col-sm-8">{{ user.email }}</dd>
+
+            <dt class="col-sm-4">Phone:</dt>
+            <dd class="col-sm-8">{{ user.phone|default:"-" }}</dd>
+
+            <dt class="col-sm-4">Address:</dt>
+            <dd class="col-sm-8">{{ user.address|default:"-" }}</dd>
+
+            <dt class="col-sm-4">Branches:</dt>
+            <dd class="col-sm-8">
+                {% for branch in user.branches.all %}
+                    {{ branch.name }}{% if not forloop.last %}, {% endif %}
+                {% empty %}
+                    No Branch Assigned
+                {% endfor %}
+            </dd>
+
+            <dt class="col-sm-4">Active:</dt>
+            <dd class="col-sm-8">{{ user.is_active|yesno:"Yes,No" }}</dd>
+
+            <dt class="col-sm-4">Date Joined:</dt>
+            <dd class="col-sm-8">{{ user.date_joined|date:"F j, Y, g:i a" }}</dd>
+        </dl>
+
+        <!-- Action Buttons -->
+        <div class="mt-4">
+            <a class="btn btn-primary me-2" href="{% url 'accounts:user-update' user.id %}">Update Profile</a>
+            <a class="btn btn-outline-secondary" href="{% url 'password_change' %}">Change Password</a>
+        </div>
+    </div>
 {% endblock 'content' %}

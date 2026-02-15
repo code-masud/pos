@@ -79,17 +79,6 @@ class DashboardView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
             if gross_revenue > 0 else 0
         )
 
- 
-        # Last 7 Days Revenue
-        last_7_sales = Sale.objects.filter(
-            status=Sale.COMPLETED,
-            created_at__gte=last_7_days
-        )
-
-        last_7_revenue = last_7_sales.aggregate(
-            total=Sum("total_amount")
-        )["total"] or Decimal("0.00")
-
         context.update({
             "total_sales_today": total_sales_today,
             "gross_revenue": gross_revenue,
@@ -106,7 +95,6 @@ class DashboardView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
             "pending_payments": pending_payments,
             "payments_by_method": payments_by_method,
             "refund_count": refund_count,
-            "last_7_revenue": last_7_revenue,
         })
 
         return context

@@ -218,27 +218,6 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script type="text/javascript">
-    const ctx = document.getElementById('revenueChart');
-    new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['Last 7 Days'],
-            datasets: [{
-                label: 'Revenue',
-                data: [{{ last_7_revenue|default:0 }}],
-                backgroundColor: 'rgba(54, 162, 235, 0.7)',
-                borderRadius: 6
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    display: false
-                }
-            }
-        }
-    });
 
     document.body.addEventListener("closeModal", () => {
         Swal.fire({

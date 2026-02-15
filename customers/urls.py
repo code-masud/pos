@@ -4,7 +4,7 @@ from . import views
 app_name = 'customers'
 
 urlpatterns = [
-    path('customer/autocomplete', views.customer_autocomplete, name='customer-autocomplete'),
+    path('customer/autocomplete/', views.customer_autocomplete, name='customer-autocomplete'),
 
     path("customer/list/", views.CustomerListView.as_view(), name='customer-list'),
     path("customer/add/", views.CustomerCreateView.as_view(), name='customer-create'),
