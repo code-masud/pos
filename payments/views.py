@@ -142,8 +142,8 @@ class RefundCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
                 return self.form_invalid(form)
 
             refund.sale = payment.sale
-            refund.processed_by = self.request.user
-            refund.status = "completed"
+            # refund.processed_by = self.request.user
+            # refund.status = "completed"
 
             response = super().form_valid(form)
 
